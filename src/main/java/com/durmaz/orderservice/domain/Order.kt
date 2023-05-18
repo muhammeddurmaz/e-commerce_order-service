@@ -9,22 +9,24 @@ import javax.persistence.*
 data class Order(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        var id: Long = 0,
+        val id: Long = 0,
 
         @Column(name = "customer_name")
-        var customerName: String,
+        val customerName: String,
 
         @Column(name = "total_quantity")
-        var totalQuantity: Int,
+        val totalQuantity: Int,
 
         @Column(name = "total_price")
-        var totalPrice: Double,
+        val totalPrice: Double,
 
         @Enumerated(EnumType.STRING)
-        var status: OrderStatus,
+        @Column(name="order_status")
+        val status: OrderStatus,
 
         @Column(name = "placed_date")
-        var placedDate: LocalDateTime,
+        val placedDate: LocalDateTime,
 
-        var address: String,
+        @Column(name= "adress")
+        val address: String,
 )
