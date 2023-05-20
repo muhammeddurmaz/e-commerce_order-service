@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull
 data class OrderItem(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long = 0,
+        val id: Long?,
 
         @Min(1)
         @Column(name ="quantity")
