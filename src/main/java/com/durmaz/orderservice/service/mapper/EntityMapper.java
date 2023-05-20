@@ -8,8 +8,6 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 
 
-import java.util.List;
-
 /**
  * Contract for a generic dto to entity mapper.
  *
