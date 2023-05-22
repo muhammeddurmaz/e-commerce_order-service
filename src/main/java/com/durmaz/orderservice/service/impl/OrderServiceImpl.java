@@ -1,11 +1,9 @@
 package com.durmaz.orderservice.service.impl;
 
 import com.durmaz.orderservice.domain.Order;
-import com.durmaz.orderservice.domain.OrderItem;
-import com.durmaz.orderservice.domain.enums.OrderItemStatus;
 import com.durmaz.orderservice.domain.enums.OrderStatus;
-import com.durmaz.orderservice.repository.OrderItemRepository;
 import com.durmaz.orderservice.repository.OrderRepository;
+import com.durmaz.orderservice.service.OrderItemService;
 import com.durmaz.orderservice.service.OrderService;
 import com.durmaz.orderservice.service.dto.CreateOrderRequestDTO;
 import com.durmaz.orderservice.service.dto.OrderDTO;
@@ -20,17 +18,18 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
-    private final OrderItemRepository orderItemRepository;
 
-    public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper , OrderItemRepository orderItemRepository) {
+    private final OrderItemService orderItemService;
+
+    public OrderServiceImpl(OrderRepository orderRepository,OrderMapper orderMapper, OrderItemService orderItemService) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
-        this.orderItemRepository = orderItemRepository;
+        this.orderItemService = orderItemService;
     }
 
 
     @Override
-    public OrderDTO creatOrder(CreateOrderRequestDTO orderRequestDTO) {
+    public OrderDTO createOrder(CreateOrderRequestDTO orderRequestDTO) {
         String customerName = orderRequestDTO.getCustomerName();
         Integer totalQuantity = orderRequestDTO.getTotalQuantity();
         Double totalPrice = orderRequestDTO.getTotalAmount();
@@ -41,14 +40,8 @@ public class OrderServiceImpl implements OrderService {
         Order newOrder = orderRepository.save(orderMapper.toEntity(orderDTO));
 
         for(OrderItemDTO item: orderRequestDTO.getOrderItems()){
-            OrderItem newItem = new OrderItem(
-                    1L,
-                    item.getQuantity(),
-                    item.getTotalPrice(),
-                    OrderItemStatus.PENDING,
-                    item.getProductId(),
-                    newOrder);
-            orderItemRepository.save(newItem);
+            item.setOrderID(newOrder.getId());
+            orderItemService.save(item);
         }
 
         return orderMapper.toDto(newOrder);
