@@ -1,11 +1,8 @@
 package com.durmaz.orderservice.service.impl;
 
 import com.durmaz.orderservice.domain.OrderItem;
-import com.durmaz.orderservice.domain.enums.OrderItemStatus;
 import com.durmaz.orderservice.repository.OrderItemRepository;
 import com.durmaz.orderservice.service.OrderItemService;
-import com.durmaz.orderservice.service.dto.NewOrderItemDTO;
-import com.durmaz.orderservice.service.dto.OrderDTO;
 import com.durmaz.orderservice.service.dto.OrderItemDTO;
 import com.durmaz.orderservice.service.mapper.OrderItemMapper;
 import org.springframework.stereotype.Service;
