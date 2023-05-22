@@ -5,5 +5,5 @@ data class CreateOrderRequestDTO(
         val totalQuantity: Int,
         val totalAmount: Double,
         val adress: String,
-        val orderItems: List<OrderItemDTO>
+        val orderItems: List<NewOrderItemDTO>
 )
