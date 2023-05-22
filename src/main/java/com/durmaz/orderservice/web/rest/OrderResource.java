@@ -18,7 +18,7 @@ public class OrderResource {
 
     @PostMapping("/order")
     public ResponseEntity<OrderDTO> createOrder(@RequestBody CreateOrderRequestDTO requestDTO){
-        OrderDTO orderDTO = orderService.creatOrder(requestDTO);
+        OrderDTO orderDTO = orderService.createOrder(requestDTO);
         return ResponseEntity.ok().body(orderDTO);
     }
 }
