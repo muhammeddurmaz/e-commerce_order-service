@@ -1,11 +1,13 @@
 package com.durmaz.orderservice.service.impl;
 
 import com.durmaz.orderservice.domain.Order;
+import com.durmaz.orderservice.domain.enums.OrderItemStatus;
 import com.durmaz.orderservice.domain.enums.OrderStatus;
 import com.durmaz.orderservice.repository.OrderRepository;
 import com.durmaz.orderservice.service.OrderItemService;
 import com.durmaz.orderservice.service.OrderService;
 import com.durmaz.orderservice.service.dto.CreateOrderRequestDTO;
+import com.durmaz.orderservice.service.dto.NewOrderItemDTO;
 import com.durmaz.orderservice.service.dto.OrderDTO;
 import com.durmaz.orderservice.service.dto.OrderItemDTO;
 import com.durmaz.orderservice.service.mapper.OrderMapper;
@@ -37,13 +39,21 @@ public class OrderServiceImpl implements OrderService {
         LocalDateTime placedDate = LocalDateTime.now();
         OrderDTO orderDTO = new OrderDTO(null,customerName,totalQuantity,totalPrice, OrderStatus.PENDING,placedDate,adress);
 
-        Order newOrder = orderRepository.save(orderMapper.toEntity(orderDTO));
+        Order newOrder = orderRepository.save(OrderDTO.toEntity(orderDTO));
 
-        for(OrderItemDTO item: orderRequestDTO.getOrderItems()){
-            item.setOrderID(newOrder.getId());
-            orderItemService.save(item);
+        for(NewOrderItemDTO item: orderRequestDTO.getOrderItems()){
+            OrderItemDTO orderItemDTO = new OrderItemDTO(
+                    null,
+                    item.getQuantity(),
+                    item.getTotalPrice(),
+                    OrderItemStatus.PENDING,
+                    item.getProductId(),
+                    OrderDTO.toDto(newOrder)
+
+            );
+            orderItemService.save(orderItemDTO);
         }
 
-        return orderMapper.toDto(newOrder);
+        return OrderDTO.toDto(newOrder);
     }
 }

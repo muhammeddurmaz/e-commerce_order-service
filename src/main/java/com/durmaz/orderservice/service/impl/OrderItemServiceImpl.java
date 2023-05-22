@@ -24,16 +24,14 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public OrderItemDTO save(OrderItemDTO orderItemDTO) {
-        OrderItem newOrderItem = orderItemMapper.toEntity(orderItemDTO);
-        OrderItem savedOrderItem = orderItemRepository.save(newOrderItem);
-        OrderItemDTO result = orderItemMapper.toDto(savedOrderItem);
+        OrderItem savedOrderItem = orderItemRepository.save(OrderItemDTO.toEntity(orderItemDTO));
+        OrderItemDTO result = OrderItemDTO.toDto(savedOrderItem);
         return result;
     }
 
     @Override
     public List<OrderItemDTO> getOrderItemByOrderId(Long orderId) {
-        return orderItemRepository.findByOrderId(orderId).stream().map(orderItemMapper::toDto).collect(Collectors.toList());
+        return orderItemRepository.findByOrderId(orderId).stream().map(OrderItemDTO::toDto).collect(Collectors.toList());
     }
-
 
 }
