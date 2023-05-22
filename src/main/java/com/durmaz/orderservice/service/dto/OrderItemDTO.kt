@@ -6,5 +6,6 @@ data class OrderItemDTO(
         val quantity: Int,
         val totalPrice: Double,
         val productId: Long,
-        val status: OrderItemStatus
+        val status: OrderItemStatus,
+        var orderID:Long?
 )
