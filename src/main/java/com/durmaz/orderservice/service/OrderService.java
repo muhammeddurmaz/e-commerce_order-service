@@ -4,5 +4,5 @@ import com.durmaz.orderservice.service.dto.CreateOrderRequestDTO;
 import com.durmaz.orderservice.service.dto.OrderDTO;
 
 public interface OrderService {
-    OrderDTO creatOrder(CreateOrderRequestDTO orderRequestDTO);
+    OrderDTO createOrder(CreateOrderRequestDTO orderRequestDTO);
 }
