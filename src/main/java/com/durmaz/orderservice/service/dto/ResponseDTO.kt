@@ -1,9 +1,9 @@
 package com.durmaz.orderservice.service.dto
 
-data class ResponseDTO<T>(
+data class ResponseDTO<T> @JvmOverloads constructor(
         var message: String? = "",
         var success: Boolean? = false,
-        var data : T
+        var data : T ? = null
 ){
     fun message(message: String): ResponseDTO<T> {
         this.message = message
