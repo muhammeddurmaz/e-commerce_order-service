@@ -17,4 +17,9 @@ public class GeneralExceptionHandler {
     public ResponseEntity<?> handleOrderNotFoundException(OrderNotFoundException exception){
         return new ResponseEntity<>(exception.getMessage() , HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<?> handle(ProductNotFoundException exception){
+        return new ResponseEntity<>(exception.getExceptionMessage(), HttpStatus.resolve(exception.getExceptionMessage().getStatus()));
+    }
 }
