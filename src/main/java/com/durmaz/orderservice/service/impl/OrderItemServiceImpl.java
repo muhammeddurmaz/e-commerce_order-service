@@ -6,7 +6,9 @@ import com.durmaz.orderservice.repository.OrderItemRepository;
 import com.durmaz.orderservice.service.OrderItemService;
 import com.durmaz.orderservice.service.dto.OrderItemDTO;
 import com.durmaz.orderservice.service.dto.ProductDTO;
+import com.durmaz.orderservice.service.dto.ResponseDTO;
 import com.durmaz.orderservice.service.dto.ViewOrderItemDTO;
+import com.durmaz.orderservice.service.exception.BadRequestAlertException;
 import com.durmaz.orderservice.service.exception.OrderItemNotFoundException;
 import com.durmaz.orderservice.service.mapper.OrderItemMapper;
 import org.springframework.stereotype.Service;
@@ -33,8 +35,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Override
     public OrderItemDTO save(OrderItemDTO orderItemDTO) {
         OrderItem savedOrderItem = orderItemRepository.save(OrderItemDTO.toEntity(orderItemDTO));
-        OrderItemDTO result = OrderItemDTO.toDto(savedOrderItem);
-        return result;
+        return OrderItemDTO.toDto(savedOrderItem);
     }
 
     @Override
@@ -47,7 +48,10 @@ public class OrderItemServiceImpl implements OrderItemService {
         OrderItem orderItem = orderItemRepository.findById(id)
                 .orElseThrow(() -> new OrderItemNotFoundException( "OrderItem could not found by id " + id));
 
-        ProductDTO productDTO = productServiceClient.getProductById(orderItem.getProductId()).getBody();
+        ProductDTO productDTO = productServiceClient.getProductById(orderItem.getProductId()).getBody().getData();
+        if(productDTO == null){
+            throw new BadRequestAlertException("Product Not Fount");
+        }
         ViewOrderItemDTO dto = new ViewOrderItemDTO(
                 orderItem.getId(),
                 orderItem.getQuantity(),
@@ -63,7 +67,14 @@ public class OrderItemServiceImpl implements OrderItemService {
         List<OrderItemDTO> orderItems = orderItemRepository.findAllByOrderId(id).stream().map(OrderItemDTO::toDto).collect(Collectors.toList());
         List<ViewOrderItemDTO> resultDtos = new ArrayList<>();
         for(OrderItemDTO orderItem : orderItems){
-            ProductDTO productDTO = productServiceClient.getProductById(orderItem.getProductId()).getBody();
+            ProductDTO productDTO = productServiceClient
+                    .getProductById(orderItem.getProductId())
+                    .getBody()
+                    .getData();
+
+            if(productDTO == null){
+                throw new BadRequestAlertException("Product Not Fount");
+            }
             ViewOrderItemDTO dto = new ViewOrderItemDTO(
                     orderItem.getId(),
                     orderItem.getQuantity(),
