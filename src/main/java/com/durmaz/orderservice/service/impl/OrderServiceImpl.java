@@ -26,7 +26,7 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public OrderDTO createOrder(CreateOrderRequestDTO orderRequestDTO) {
+    public OrderDTO saveOrder(CreateOrderRequestDTO orderRequestDTO) {
         String customerName = orderRequestDTO.getCustomerName();
         Integer totalQuantity = orderRequestDTO.getTotalQuantity();
         Double totalPrice = orderRequestDTO.getTotalAmount();
