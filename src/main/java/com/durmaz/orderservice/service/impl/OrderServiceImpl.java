@@ -6,32 +6,27 @@ import com.durmaz.orderservice.domain.enums.OrderStatus;
 import com.durmaz.orderservice.repository.OrderRepository;
 import com.durmaz.orderservice.service.OrderItemService;
 import com.durmaz.orderservice.service.OrderService;
-import com.durmaz.orderservice.service.dto.CreateOrderRequestDTO;
-import com.durmaz.orderservice.service.dto.NewOrderItemDTO;
-import com.durmaz.orderservice.service.dto.OrderDTO;
-import com.durmaz.orderservice.service.dto.OrderItemDTO;
-import com.durmaz.orderservice.service.mapper.OrderMapper;
+import com.durmaz.orderservice.service.dto.*;
+import com.durmaz.orderservice.service.exception.OrderNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-    private final OrderMapper orderMapper;
 
     private final OrderItemService orderItemService;
 
-    public OrderServiceImpl(OrderRepository orderRepository,OrderMapper orderMapper, OrderItemService orderItemService) {
+    public OrderServiceImpl(OrderRepository orderRepository, OrderItemService orderItemService) {
         this.orderRepository = orderRepository;
-        this.orderMapper = orderMapper;
         this.orderItemService = orderItemService;
     }
 
 
     @Override
-    public OrderDTO createOrder(CreateOrderRequestDTO orderRequestDTO) {
+    public OrderDTO saveOrder(CreateOrderRequestDTO orderRequestDTO) {
         String customerName = orderRequestDTO.getCustomerName();
         Integer totalQuantity = orderRequestDTO.getTotalQuantity();
         Double totalPrice = orderRequestDTO.getTotalAmount();
@@ -55,5 +50,24 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return OrderDTO.toDto(newOrder);
+    }
+
+    @Override
+    public ViewOrderDetailDTO getOrderDetailById(Long id){
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Order could not found by id " + id));
+        OrderDTO orderDTO = OrderDTO.toDto(order);
+        List<ViewOrderItemDTO> dtos = orderItemService.getOrderItemsDetailByOrderId(id);
+        ViewOrderDetailDTO result = new ViewOrderDetailDTO(
+                orderDTO.getId(),
+                orderDTO.getCustomerName(),
+                orderDTO.getTotalQuantitiy(),
+                orderDTO.getTotalPrice(),
+                orderDTO.getStatus(),
+                orderDTO.getPlacedDate(),
+                orderDTO.getAddress(),
+                dtos
+        );
+        return result;
     }
 }
