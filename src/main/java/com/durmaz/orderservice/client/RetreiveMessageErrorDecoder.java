@@ -19,7 +19,7 @@ public class RetreiveMessageErrorDecoder implements ErrorDecoder {
     public Exception decode(String methodKey, Response response){
         ExceptionMessage message = null;
         try(InputStream body = response.body().asInputStream()) {
-
+            message = new ExceptionMessage();
             message.setTimestamp(response.headers().get("date").toString());
             message.setStatus(response.status());
             message.setError(HttpStatus.resolve(response.status()).getReasonPhrase());
@@ -30,7 +30,8 @@ public class RetreiveMessageErrorDecoder implements ErrorDecoder {
             return new Exception(e.getMessage());
         }
         switch (response.status()){
-            case 404: throw new ProductNotFoundException(message);
+            case 404:
+                throw new ProductNotFoundException(message);
             default:
                 return errorDecoder.decode(methodKey,response);
         }

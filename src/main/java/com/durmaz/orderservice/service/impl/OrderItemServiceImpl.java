@@ -6,11 +6,9 @@ import com.durmaz.orderservice.repository.OrderItemRepository;
 import com.durmaz.orderservice.service.OrderItemService;
 import com.durmaz.orderservice.service.dto.OrderItemDTO;
 import com.durmaz.orderservice.service.dto.ProductDTO;
-import com.durmaz.orderservice.service.dto.ResponseDTO;
 import com.durmaz.orderservice.service.dto.ViewOrderItemDTO;
 import com.durmaz.orderservice.service.exception.BadRequestAlertException;
 import com.durmaz.orderservice.service.exception.OrderItemNotFoundException;
-import com.durmaz.orderservice.service.mapper.OrderItemMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,13 +20,11 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     private final OrderItemRepository orderItemRepository;
 
-    private final OrderItemMapper orderItemMapper;
 
     private final ProductServiceClient productServiceClient;
 
-    public OrderItemServiceImpl(OrderItemRepository orderItemRepository, OrderItemMapper orderItemMapper, ProductServiceClient productServiceClient) {
+    public OrderItemServiceImpl(OrderItemRepository orderItemRepository, ProductServiceClient productServiceClient) {
         this.orderItemRepository = orderItemRepository;
-        this.orderItemMapper = orderItemMapper;
         this.productServiceClient = productServiceClient;
     }
 
@@ -49,9 +45,6 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .orElseThrow(() -> new OrderItemNotFoundException( "OrderItem could not found by id " + id));
 
         ProductDTO productDTO = productServiceClient.getProductById(orderItem.getProductId()).getBody().getData();
-        if(productDTO == null){
-            throw new BadRequestAlertException("Product Not Fount");
-        }
         ViewOrderItemDTO dto = new ViewOrderItemDTO(
                 orderItem.getId(),
                 orderItem.getQuantity(),

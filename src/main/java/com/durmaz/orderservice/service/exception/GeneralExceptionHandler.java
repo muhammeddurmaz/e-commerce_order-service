@@ -19,7 +19,7 @@ public class GeneralExceptionHandler {
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<?> handle(ProductNotFoundException exception){
+    public ResponseEntity<ExceptionMessage> handle(ProductNotFoundException exception){
         return new ResponseEntity<>(exception.getExceptionMessage(), HttpStatus.resolve(exception.getExceptionMessage().getStatus()));
     }
 }
