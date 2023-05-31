@@ -5,7 +5,7 @@ import com.durmaz.orderservice.domain.enums.OrderStatus
 import java.time.LocalDateTime
 
 data class OrderDTO @JvmOverloads constructor(
-        val id:Long ? = 1L,
+        val id:Long ? = null,
         val customerName: String,
         val totalQuantitiy: Int,
         val totalPrice: Double,

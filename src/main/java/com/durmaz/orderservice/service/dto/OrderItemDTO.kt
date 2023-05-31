@@ -3,11 +3,11 @@ package com.durmaz.orderservice.service.dto
 import com.durmaz.orderservice.domain.OrderItem
 import com.durmaz.orderservice.domain.enums.OrderItemStatus
 
-data class OrderItemDTO(
-        var id:Long?,
+data class OrderItemDTO @JvmOverloads constructor(
+        var id:Long ? = null,
         var quantity:Int,
         var totalPrice:Double,
-        var status: OrderItemStatus = OrderItemStatus.PENDING,
+        var status: OrderItemStatus,
         var productId:Long,
         var orderDTO: OrderDTO
 ){
