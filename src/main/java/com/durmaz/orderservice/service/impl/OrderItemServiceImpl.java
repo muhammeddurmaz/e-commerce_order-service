@@ -30,6 +30,10 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public OrderItemDTO save(OrderItemDTO orderItemDTO) {
+        Double productPrice = productServiceClient.getProductPrice(orderItemDTO.getProductId()).getBody().getData();
+
+        Double totalPrice = orderItemDTO.getQuantity() * productPrice;
+        orderItemDTO.setTotalPrice(totalPrice);
         OrderItem savedOrderItem = orderItemRepository.save(OrderItemDTO.toEntity(orderItemDTO));
         return OrderItemDTO.toDto(savedOrderItem);
     }
