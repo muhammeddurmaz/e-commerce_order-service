@@ -13,8 +13,6 @@ import java.util.List;
 
 @FeignClient(name = "product-service" , path = "/api")
 public interface ProductServiceClient {
-
-
     @GetMapping("/products/{id}")
     ResponseEntity<ResponseDTO<ProductDTO>> getProductById(@PathVariable(name = "id") Long id);
 

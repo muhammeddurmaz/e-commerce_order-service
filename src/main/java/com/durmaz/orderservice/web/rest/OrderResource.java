@@ -21,7 +21,7 @@ public class OrderResource {
         this.orderService = orderService;
     }
 
-    @PostMapping("/order")
+    @PostMapping("/orders")
     public ResponseEntity<ResponseDTO> createOrder(@RequestBody CreateOrderRequestDTO requestDTO) throws JsonParseException {
         OrderDTO result = orderService.saveOrder(requestDTO);
         ResponseDTO responseDTO = new ResponseDTO<>()
