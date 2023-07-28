@@ -88,4 +88,12 @@ public class OrderServiceImpl implements OrderService {
         result.setOrderItemDetails(dtos);
         return result;
     }
+
+    @Override
+    public List<Long> getAllOrderId(){
+        List<Long> ids = orderRepository.findAll()
+                .stream().map(o-> o.getId())
+                .collect(Collectors.toList());
+        return ids;
+    }
 }
