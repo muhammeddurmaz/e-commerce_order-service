@@ -82,10 +82,10 @@ public class OrderServiceImpl implements OrderService {
     public ViewOrderDetailDTO getOrderDetailById(Long id){
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Order could not found by id " + id));
-        OrderDTO orderDTO = OrderDTO.toDto(order);
-        List<ViewOrderItemDTO> dtos = orderItemService.getOrderItemsDetailByOrderId(id);
+//        OrderDTO orderDTO = OrderDTO.toDto(order);
+        List<ViewOrderItemDTO> viewOrderItemDtoList = orderItemService.getOrderItemsDetailByOrderId(id);
         ViewOrderDetailDTO result = orderMapper.toDto(order);
-        result.setOrderItemDetails(dtos);
+        result.setOrderItemDetails(viewOrderItemDtoList);
         return result;
     }
 
