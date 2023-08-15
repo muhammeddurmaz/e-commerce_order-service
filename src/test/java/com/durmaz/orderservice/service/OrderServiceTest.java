@@ -54,4 +54,16 @@ public class OrderServiceTest {
         Mockito.verify(orderMapper).toDto(order);
     }
 
+    @Test
+    public void testGetOrderDetailById_OrderNotFound() {
+        Long orderId = 2L;
+
+        Mockito.when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
+
+        assertThrows(OrderNotFoundException.class, () -> orderService.getOrderDetailById(orderId));
+
+        Mockito.verify(orderRepository).findById(orderId);
+        Mockito.verifyNoMoreInteractions(orderItemService);
+        Mockito.verifyNoMoreInteractions(orderMapper);
+    }
 }
