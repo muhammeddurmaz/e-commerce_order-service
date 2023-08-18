@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,6 +50,9 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .orElseThrow(() -> new OrderItemNotFoundException( "OrderItem could not found by id " + id));
 
         ProductDTO productDTO = productServiceClient.getProductById(orderItem.getProductId()).getBody().getData();
+        if(productDTO == null){
+            throw new BadRequestAlertException("Product Not Fount");
+        }
         ViewOrderItemDTO dto = new ViewOrderItemDTO(
                 orderItem.getId(),
                 orderItem.getQuantity(),
@@ -65,9 +69,9 @@ public class OrderItemServiceImpl implements OrderItemService {
         List<ViewOrderItemDTO> resultDtos = new ArrayList<>();
         for(OrderItemDTO orderItem : orderItems){
             ProductDTO productDTO = productServiceClient
-                    .getProductById(orderItem.getProductId())
-                    .getBody()
-                    .getData();
+                            .getProductById(orderItem.getProductId())
+                            .getBody()
+                            .getData();
 
             if(productDTO == null){
                 throw new BadRequestAlertException("Product Not Fount");
